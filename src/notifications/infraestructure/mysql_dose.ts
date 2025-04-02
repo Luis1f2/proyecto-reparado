@@ -4,9 +4,14 @@ import pool from "../../database/db_Mysql";
 export class MySQLDoseRepository implements DoseRepository {
     async getPending() {
         const [dosis]: any = await pool.query(`
-            SELECT d.id, d.usuario_id as usuarioId, p.nombre as pacienteNombre
+            SELECT 
+                d.id_dosis,
+                d.hora,
+                p.nombre AS pacienteNombre,
+                m.nombre AS medicamentoNombre
             FROM dosis d
-            JOIN paciente p ON d.paciente_id = p.id
+            INNER JOIN medicamento m ON d.medicamento_id = m.id
+            INNER JOIN paciente p ON m.paciente_id = p.id
             WHERE TIME(d.hora) <= TIME(NOW())
               AND NOT d.notificada
               AND NOT d.aceptada
@@ -18,13 +23,13 @@ export class MySQLDoseRepository implements DoseRepository {
         await pool.query(`
             UPDATE dosis 
             SET notificada = 1, hora_notificacion = NOW() 
-            WHERE id = ?
+            WHERE id_dosis = ?
         `, [doseId]);
     }
 
     async resetUnaccepted() {
         const [noAceptadas]: any = await pool.query(`
-            SELECT id FROM dosis
+            SELECT id_dosis FROM dosis
             WHERE notificada = 1 
               AND aceptada = 0 
               AND hora_notificacion IS NOT NULL 
@@ -35,8 +40,8 @@ export class MySQLDoseRepository implements DoseRepository {
             await pool.query(`
                 UPDATE dosis 
                 SET notificada = 0, hora_notificacion = NULL 
-                WHERE id = ?
-            `, [d.id]);
+                WHERE id_dosis = ?
+            `, [d.id_dosis]);
         }
     }
 }

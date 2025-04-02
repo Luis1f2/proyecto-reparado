@@ -1,9 +1,8 @@
 export interface Notification {
-    id?: number;
-    mensaje: string;
     tipo: string;
-    usuarioId: number;
-    leido?: boolean;
-    fecha?: string;
-    dosisId?: number;
-}
+    paciente: string;
+    medicamento: string;
+    hora: string;
+    dosisId: number;
+  }
+  

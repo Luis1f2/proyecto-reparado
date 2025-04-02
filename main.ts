@@ -8,8 +8,7 @@ import userRoutes from './src/users/infrastructure/UserRoutes';
 import patientRoutes from './src/patient/infrastructure/PatientRoutes'; 
 import medicineRoutes from './src/medicine/infrastructure/medicineRoutes';
 import doseRouter from './src/dose/infrastructure/doseRouter'
-import { SendDoseNotification } from "./src/notifications/applications/sendDoseNotification" ;
-import { MySQLNotificationRepository } from "./src/notifications/infraestructure/mysql_notification";
+import { sendDoseNotifications } from "./src/notifications/applications/sendDoseNotification" ;
 import { WebSocketNotifier } from "./src/notifications/infraestructure/WebRouter";
 import { MySQLDoseRepository } from "./src/notifications/infraestructure/mysql_dose";
 
@@ -24,7 +23,7 @@ const wss = new WebSocketServer({ server });
 
 app.use(express.json());
 app.use(cors({
-origin: ['http://localhost:5270'], // ----> pon el puerto
+origin: ['http://localhost:5270'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }))
@@ -35,13 +34,17 @@ app.use('/api/patient', patientRoutes);
 app.use('/api/medicine',medicineRoutes);
 app.use('/api/dose',doseRouter);
 
+app.get('/', (req, res) => {
+    res.send('API conectada');
+  });
 
 const doseRepo = new MySQLDoseRepository();
-const notifRepo = new MySQLNotificationRepository();
-const notifier = new WebSocketNotifier();
-const sendDoseNotification = new SendDoseNotification(notifRepo, notifier, doseRepo);
 
-setInterval(() => sendDoseNotification.execute(), 60 * 1000);
+const notifier = new WebSocketNotifier();
+
+setInterval(() => {
+    sendDoseNotifications(doseRepo,  notifier);
+  }, 60 * 1000);
 
 wss.on('connection', (ws: WebSocket) => {
     console.log('Cliente conectado');
