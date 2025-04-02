@@ -8,6 +8,11 @@ import userRoutes from './src/users/infrastructure/UserRoutes';
 import patientRoutes from './src/patient/infrastructure/PatientRoutes'; 
 import medicineRoutes from './src/medicine/infrastructure/medicineRoutes';
 import doseRouter from './src/dose/infrastructure/doseRouter'
+import { SendDoseNotification } from "./src/notifications/applications/sendDoseNotification" ;
+import { MySQLNotificationRepository } from "./src/notifications/infraestructure/mysql_notification";
+import { WebSocketNotifier } from "./src/notifications/infraestructure/WebRouter";
+import { MySQLDoseRepository } from "./src/notifications/infraestructure/mysql_dose";
+
 
 dotenv.config();
 
@@ -30,6 +35,13 @@ app.use('/api/patient', patientRoutes);
 app.use('/api/medicine',medicineRoutes);
 app.use('/api/dose',doseRouter);
 
+
+const doseRepo = new MySQLDoseRepository();
+const notifRepo = new MySQLNotificationRepository();
+const notifier = new WebSocketNotifier();
+const sendDoseNotification = new SendDoseNotification(notifRepo, notifier, doseRepo);
+
+setInterval(() => sendDoseNotification.execute(), 60 * 1000);
 
 wss.on('connection', (ws: WebSocket) => {
     console.log('Cliente conectado');
