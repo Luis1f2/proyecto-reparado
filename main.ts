@@ -9,7 +9,7 @@ import userRoutes from './src/users/infrastructure/UserRoutes';
 import patientRoutes from './src/patient/infrastructure/PatientRoutes'; 
 import medicineRoutes from './src/medicine/infrastructure/medicineRoutes';
 import doseRouter from './src/dose/infrastructure/doseRouter';
-import {authenticateToken} from "./src/middleware/authmiddleware"; 
+
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ app.use(cors({
 
 app.use('/api/user', userRoutes);
 
-app.use(authenticateToken);
+
 
 app.use('/api/patient', patientRoutes); 
 app.use('/api/medicine', medicineRoutes);

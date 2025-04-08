@@ -4,7 +4,7 @@ import { DeleteUserController } from "./controllers/DeleteUserController";
 import { ViewUsersController } from "./controllers/ViewUsersController";
 import { ViewAllUserController } from "./controllers/ViewAllUserController";
 import { LoginUserController} from "./controllers/LoginUserController";
-import { authenticateToken } from "../../middleware/authmiddleware";
+
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ router.post("/login", async (req, res, next) => {
 		next(error);
 	}
 });
-router.use(authenticateToken);
+
 
 router.get("/users", (req, res) => viewAllUserController.handle(req, res));
 router.get("/:idUser", (req, res) => viewUserController.handle(req, res));

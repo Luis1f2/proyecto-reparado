@@ -3,7 +3,7 @@ import { LoginUserDTO } from "./UserDto";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 
-const SECRET_KEY = "mysecretkey";
+const JWT_SECRET= "mysecretkey";
 
 export class LoginUser {
   constructor(private userRepository: IUserRepository) {}
@@ -23,7 +23,7 @@ export class LoginUser {
     console.log("🔵 Contraseña recibida:", contraseña);
     console.log("🔵 Hash almacenado:", user.contraseña);
     
-    // Verificar que el hash almacenado comienza con $2b$
+   
     if (!user.contraseña.startsWith('$2b$')) {
       console.error("🔴 Error: El hash almacenado no tiene el formato correcto");
       throw new Error("Invalid password format");
@@ -39,7 +39,7 @@ export class LoginUser {
 
     const token = jwt.sign(
       { id_usuario: user.id_usuario, email: user.email, nombre: user.nombre },
-      SECRET_KEY,
+      JWT_SECRET,
       { expiresIn: "1h" }
     );
 
