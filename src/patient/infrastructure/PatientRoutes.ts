@@ -1,30 +1,24 @@
 import express from "express";
 import { RegisterPatientController } from "./controllers/RegisterPatientController";
-import { UpdatePatientController } from "./controllers/UpdatePatientController";
-import { GetPacienteByIdController } from "./controllers/GetIdPatientController";
 import { DeletePatientController } from "./controllers/DeletePatientController";
 import { GetAllPatientController } from "./controllers/GetAllpatientController";
-
-import {
-  registerPatiens,
-  updatePatient,
-  getPacienteById,
-  deletePatient,
-  getAllPatiens,
-} from "./dependencies"; 
+import { GetPacienteByIdController } from "./controllers/GetIdPatientController";
+import { patientRepository, registerPatiens, deletePatient, getAllPatiens, getPacienteById } from "./dependencies";
 
 const router = express.Router();
 
-const registerController = new RegisterPatientController(registerPatiens);
-const updateController = new UpdatePatientController(updatePatient);
-const getByIdController = new GetPacienteByIdController(getPacienteById);
-const deleteController = new DeletePatientController(deletePatient);
-const getAllController = new GetAllPatientController(getAllPatiens);
+// Inicializar controladores con las dependencias
+const registerPatientController = new RegisterPatientController(registerPatiens);
+const deletePatientController = new DeletePatientController(deletePatient);
+const getAllPatientController = new GetAllPatientController(getAllPatiens);
+const getByIdPatientController = new GetPacienteByIdController(getPacienteById);
 
-router.post("/registrer", registerController.handle.bind(registerController));
-router.get("/", getAllController.handle.bind(getAllController));
-router.get("/:id", getByIdController.handle.bind(getByIdController));
-router.put("/:id", updateController.handle.bind(updateController));
-router.delete("/:id", deleteController.handle.bind(deleteController));
 
-export default router;
+
+
+router.post("/regiter", (req, res) => registerPatientController.handle(req, res));
+router.get("/", (req, res) => getAllPatientController.handle(req, res));
+router.get("/:idPatient", (req, res) => getByIdPatientController.handle(req, res));
+router.delete("/:idPatient", (req, res) => deletePatientController.handle(req, res));
+
+export default router; 

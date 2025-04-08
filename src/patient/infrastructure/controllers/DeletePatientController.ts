@@ -1,19 +1,17 @@
-import { RequestHandler } from "express";
+import { Request, Response } from 'express';
 import { DeletePatient } from "../../application/DeletePatient";
 
 export class DeletePatientController {
   constructor(private deletePatient: DeletePatient) {}
 
-  handle: RequestHandler = async (req, res) => {
+  async handle(req: Request, res: Response): Promise<void> {
     try {
-      const eliminado = await this.deletePatient.execute(req.params.id);
-      if (eliminado) {
-        res.status(204).send();
-      } else {
-         res.status(404).json({ message: "Paciente no encontrado" });
-      }
+      const id = req.params.idPatient;
+      await this.deletePatient.execute(id);
+      res.status(200).json({ message: 'Paciente eliminado correctamente' });
     } catch (error) {
-       res.status(500).json({ message: "Error eliminando paciente" });
+      console.error('Error al eliminar paciente:', error);
+      res.status(500).json({ message: 'Error al eliminar paciente' });
     }
-  };
+  }
 }

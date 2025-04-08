@@ -1,19 +1,23 @@
-import { RequestHandler } from "express";
+import { Request, Response } from 'express';
 import { GetPatientById } from "../../application/GetPatiensById";
 
 export class GetPacienteByIdController {
-  constructor(private getPacienteById: GetPatientById) {}
+    constructor(private getPatientById: GetPatientById) {}
 
-  handle: RequestHandler = async (req, res) => {
-    try {
-      const paciente = await this.getPacienteById.execute(req.params.id);
-      if (paciente) {
-        res.json(paciente);
-      } else {
-         res.status(404).json({ message: "Paciente no encontrado" });
-      }
-    } catch (error) {
-       res.status(500).json({ message: "Error obteniendo paciente" });
+    async handle(req: Request, res: Response): Promise<void> {
+        try {
+            const id = req.params.idPatient;
+            const patient = await this.getPatientById.execute(id);
+            
+            if (!patient) {
+                res.status(404).json({ message: 'Paciente no encontrado' });
+                return;
+            }
+
+            res.status(200).json(patient);
+        } catch (error) {
+            console.error('Error al obtener paciente:', error);
+            res.status(500).json({ message: 'Error al obtener paciente' });
+        }
     }
-  };
 }

@@ -1,11 +1,19 @@
 import { Request, Response } from "express";
-import { deleteUser } from "../dependencies";
-import { broadcast } from "../../../../main";
+import { DeleteUser } from "../../applications/Delete_User";
+import { MySQLUserRepository } from "../MySQL_users";
 
 export class DeleteUserController {
-  static async execute(req: Request, res: Response) {
-    await deleteUser.execute(Number(req.params.id_usuario));
-    broadcast(JSON.stringify({ event: "user:deleted", data: { id_usuario: req.params.id_usuario } }));
-    res.json({ message: "User deleted successfully" });
+  async handle(req: Request, res: Response) {
+    const userRepository = new MySQLUserRepository();
+    const deleteUser = new DeleteUser(userRepository);
+
+    try {
+      const id = parseInt(req.params.idUser);
+      await deleteUser.execute(id);
+      res.status(200).json({ message: "Usuario eliminado correctamente" });
+    } catch (error) {
+      console.error("Error al eliminar usuario:", error);
+      res.status(500).json({ message: "Error al eliminar usuario" });
+    }
   }
 }

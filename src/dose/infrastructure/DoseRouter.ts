@@ -1,16 +1,16 @@
-import { Router } from "express";
-import { saveDoseController } from "./controller/saveDoseController";
-import { getAllDosesController } from "./controller/getAllDoseController";
-import { getDoseByIdController } from "./controller/getDoseByidController";
-import { UpdateDoseController } from "./controller/updateDoseController";
-import { DeleteDoseController } from "./controller/deleteDoseController";
+import { Router } from 'express';
+import { saveDoseController } from './controller/saveDoseController';
+import { getAllDoseController } from './controller/getAllDoseController';
+import { getDoseByIdController } from './controller/getDoseByidController';
+import { updateDoseController } from './controller/updateDoseController';
+import { deleteDoseController } from './controller/deleteDoseController';
 
 const router = Router();
 
-router.get("/", getAllDosesController);
-router.get("/:id", getDoseByIdController);
-router.post("/", saveDoseController);
-router.put("/:id", UpdateDoseController);
-router.delete("/:id", DeleteDoseController);
+router.post('/', saveDoseController);
+router.get('/', getAllDoseController);
+router.get('/:id', getDoseByIdController);
+router.put('/:id', updateDoseController);
+router.delete('/:id', deleteDoseController);
 
 export default router;

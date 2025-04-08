@@ -1,18 +1,16 @@
-import express from 'express';
-import {
-  saveMedicineController,
-  getMedicineByIdController,
-  getAllMedicinesController,
-  updateMedicineController,
-  deleteMedicineController,
+import express from "express";
+import { 
+    saveMedicineController,
+    deleteMedicineController,
+    getMedicineByIdController,
+    getAllMedicinesController
 } from "./dependencia";
 
 const router = express.Router();
 
-router.post('/registrer', (req, res) => saveMedicineController.run(req, res));
-router.get('/:id', (req, res) => getMedicineByIdController.run(req, res));
-router.get('/', (req, res) => getAllMedicinesController.run(req, res));
-router.put('/:id', (req, res) => updateMedicineController.run(req, res));
-router.delete('/:id', (req, res) => deleteMedicineController.run(req, res));
+router.post("/", (req, res) => saveMedicineController.handle(req, res));
+router.get("/", (req, res) => getAllMedicinesController.handle(req, res));
+router.get("/:idMedication", (req, res) => getMedicineByIdController.handle(req, res));
+router.delete("/:idMedication", (req, res) => deleteMedicineController.handle(req, res));
 
-export default router;
+export default router; 

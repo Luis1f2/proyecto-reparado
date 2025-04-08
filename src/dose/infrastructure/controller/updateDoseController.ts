@@ -4,7 +4,7 @@ import { updateDose } from "../../../dose/applications/updateDose";
 
 const repo = new MySQLDoseRepository();
 
-export const UpdateDoseController = async (req: Request, res: Response) => {
+export const updateDoseController = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
     const dose = req.body;

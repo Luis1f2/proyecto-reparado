@@ -6,13 +6,13 @@ export class MySQLDoseRepository implements DoseRepository {
         const [dosis]: any = await pool.query(`
             SELECT 
                 d.id_dosis,
-                d.hora,
+                d.horario AS hora,
                 p.nombre AS pacienteNombre,
                 m.nombre AS medicamentoNombre
             FROM dosis d
-            INNER JOIN medicamento m ON d.medicamento_id = m.id
-            INNER JOIN paciente p ON m.paciente_id = p.id
-            WHERE TIME(d.hora) <= TIME(NOW())
+            INNER JOIN medicamento m ON d.id_medicamento = m.id_medicamento
+            INNER JOIN paciente p ON m.id_paciente = p.id_paciente
+            WHERE TIME(d.horario) <= TIME(NOW())
               AND NOT d.notificada
               AND NOT d.aceptada
         `);

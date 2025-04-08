@@ -4,20 +4,19 @@ import { DeleteMedicine } from "../../applications/deleteMedecine";
 export class DeleteMedicineController {
   constructor(private readonly deleteMedicine: DeleteMedicine) {}
 
-  async run(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
-
-    const numericId = parseInt(id);
-    if (isNaN(numericId) || numericId <= 0) {
-      res.status(400).json({ error: 'ID inválido' });
-      return;
-    }
-
+  async handle(req: Request, res: Response): Promise<void> {
     try {
-      await this.deleteMedicine.execute(numericId);
+      const id = parseInt(req.params.idMedication);
+      if (isNaN(id)) {
+        res.status(400).json({ message: 'ID inválido' });
+        return;
+      }
+      
+      await this.deleteMedicine.execute(id);
       res.status(200).json({ message: 'Medicamento eliminado correctamente' });
-    } catch (err: any) {
-      res.status(500).json({ error: 'Error al eliminar el medicamento', details: err.message });
+    } catch (error) {
+      console.error('Error al eliminar medicamento:', error);
+      res.status(500).json({ message: 'Error al eliminar medicamento' });
     }
   }
 }

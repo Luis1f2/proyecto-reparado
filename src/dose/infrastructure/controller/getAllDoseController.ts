@@ -4,7 +4,7 @@ import { getAllDose } from "../../../dose/applications/getAllDose";
 
 const repo = new MySQLDoseRepository();
 
-export const getAllDosesController = async (_req: Request, res: Response) => {
+export const getAllDoseController = async (_req: Request, res: Response) => {
   try {
     const doses = await getAllDose(repo)();
     res.json(doses);

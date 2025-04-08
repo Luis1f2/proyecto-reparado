@@ -2,17 +2,15 @@ import { Request, Response } from 'express';
 import { GetAllMedicines } from "../../applications/getAlllMedicine";
 
 export class GetAllMedicinesController {
-  constructor(private readonly getAllMedicines: GetAllMedicines) {}
+  constructor(private getAllMedicines: GetAllMedicines) {}
 
-  async run(req: Request, res: Response): Promise<void> {
+  async handle(req: Request, res: Response): Promise<void> {
     try {
       const medicines = await this.getAllMedicines.execute();
       res.status(200).json(medicines);
-    } catch (err: any) {
-      res.status(500).json({
-        error: 'Error al obtener los medicamentos',
-        details: err.message,
-      });
+    } catch (error) {
+      console.error('Error al obtener medicamentos:', error);
+      res.status(500).json({ message: 'Error al obtener medicamentos' });
     }
   }
 }

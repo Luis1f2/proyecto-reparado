@@ -4,7 +4,7 @@ import { deleteDose } from "../../../dose/applications/deleteDose";
 
 const repo = new MySQLDoseRepository();
 
-export const DeleteDoseController = async (req: Request, res: Response) => {
+export const deleteDoseController = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
     await deleteDose(repo)(id);

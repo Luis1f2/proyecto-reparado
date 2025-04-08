@@ -1,15 +1,18 @@
-import { Request, Response } from "express";
-import { registerUser } from "../dependencies";
-import { broadcast } from "../../../../main";
+import { Request, Response } from 'express';
+import { RegisterUser } from "../../applications/Register_User";
+import { MySQLUserRepository } from '../MySQL_users';
 
 export class CreateUserController {
-  static async execute(req: Request, res: Response) {
+  async handle(req: Request, res: Response) {
+    const userRepository = new MySQLUserRepository();
+    const registerUser = new RegisterUser(userRepository);
+
     try {
       await registerUser.execute(req.body);
-      broadcast(JSON.stringify({ event: "user:registered", data: req.body }));
-      res.status(201).json({ message: "User created successfully" });
+      res.status(201).json({ message: 'Usuario registrado correctamente' });
     } catch (error) {
-      res.status(500).json({ message: "Error creating user" });
+      console.error('Error al crear usuario:', error);
+      res.status(500).json({ message: 'Error al registrar usuario' });
     }
   }
 }
