@@ -10,9 +10,24 @@ export class MySQLPacienteRepository implements PatientRepository {
     
       async update(id: string, paciente: Partial<Paciente>): Promise<Paciente | null> {
         const numericId = parseInt(id);
-        await pool.query("UPDATE Paciente SET ? WHERE id_paciente = ?", [paciente, numericId]);
+    
+       
+        const camposActualizables: Partial<Paciente> = {
+            nombre: paciente.nombre,
+            genero: paciente.genero,
+            fecha_nacimiento: paciente.fecha_nacimiento,
+            direccion: paciente.direccion,
+            telefono: paciente.telefono,
+            grupo_sanguineo: paciente.grupo_sanguineo,
+            peso: paciente.peso,
+            alergias: paciente.alergias,
+            enfermedades_pers: paciente.enfermedades_pers
+        };
+    
+        await pool.query("UPDATE Paciente SET ? WHERE id_paciente = ?", [camposActualizables, numericId]);
         return this.getById(id);
-      }
+    }
+    
     
       async delete(id: string): Promise<boolean> {
         const numericId = parseInt(id);

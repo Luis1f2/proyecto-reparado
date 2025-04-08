@@ -9,6 +9,7 @@ import userRoutes from './src/users/infrastructure/UserRoutes';
 import patientRoutes from './src/patient/infrastructure/PatientRoutes'; 
 import medicineRoutes from './src/medicine/infrastructure/medicineRoutes';
 import doseRouter from './src/dose/infrastructure/doseRouter';
+import {dbFirebase} from "./src/firebase/firebase-admin"
 
 
 dotenv.config();
@@ -74,3 +75,17 @@ const verifyDatabaseConnection = async () => {
 };
 
 verifyDatabaseConnection();
+const sensorRef = dbFirebase.ref('sensores');
+
+sensorRef.on('child_added', (snapshot) => {
+    const data = snapshot.val();
+    console.log('Dato recibido de Firebase:', data);
+    broadcast(JSON.stringify({ type: 'sensor-data', data }));
+});
+sensorRef.once('value', (snapshot) => {
+  console.log('Lectura manual de sensores:', snapshot.val());
+});
+sensorRef.on('value', (snapshot) => {
+  const data = snapshot.val();
+  console.log('Cambios en sensores:', data);
+});

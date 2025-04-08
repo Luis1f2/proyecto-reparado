@@ -7,7 +7,7 @@ import { deleteDoseController } from './controller/deleteDoseController';
 
 const router = Router();
 
-router.post('/', saveDoseController);
+router.post('/register', saveDoseController);
 router.get('/', getAllDoseController);
 router.get('/:id', getDoseByIdController);
 router.put('/:id', updateDoseController);
