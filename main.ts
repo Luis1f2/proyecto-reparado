@@ -10,6 +10,7 @@ import patientRoutes from './src/patient/infrastructure/PatientRoutes';
 import medicineRoutes from './src/medicine/infrastructure/medicineRoutes';
 import doseRouter from './src/dose/infrastructure/doseRouter';
 import {dbFirebase} from "./src/firebase/firebase-admin"
+import rfidRoutes from './src/rfid/infrastructure/RFIDRoutes';
 
 
 dotenv.config();
@@ -29,12 +30,10 @@ app.use(cors({
 
 
 app.use('/api/user', userRoutes);
-
-
-
 app.use('/api/patient', patientRoutes); 
 app.use('/api/medicine', medicineRoutes);
 app.use('/api/dose', doseRouter);
+app.use('/api/rfid', rfidRoutes);
 
 wss.on('connection', (ws: WebSocket) => {
   console.log('Cliente conectado');
